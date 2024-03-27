@@ -1,129 +1,198 @@
+<!DOCTYPE html>
 <html lang="en">
-<style>
-    html {
-  height: 100%;
-}
-
-body {
-  height: 100%;
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  display: grid;
-  justify-items: center;
-  align-items: center;
-  background-color: #3a3a3a;
-}
-
-#main-holder {
-  width: 50%;
-  height: 70%;
-  display: grid;
-  justify-items: center;
-  align-items: center;
-  background-color: white;
-  border-radius: 7px;
-  box-shadow: 0px 0px 5px 2px black;
-}
-
-#login-error-msg-holder {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-
-#login-error-msg {
-  width: 23%;
-  text-align: center;
-  margin: 0;
-  padding: 5px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #8a0000;
-  border: 1px solid #8a0000;
-  background-color: #e58f8f;
-  opacity: 0;
-}
-
-#error-msg-second-line {
-  display: block;
-}
-
-#login-form {
-  align-self: flex-start;
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-
-.login-form-field::placeholder {
-  color: #3a3a3a;
-}
-
-.login-form-field {
-  border: none;
-  border-bottom: 1px solid #3a3a3a;
-  margin-bottom: 10px;
-  border-radius: 3px;
-  outline: none;
-  padding: 0px 0px 5px 5px;
-}
-
-#login-form-submit {
-  width: 100%;
-  padding: 7px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  background-color: #3a3a3a;
-  cursor: pointer;
-  outline: none;
-}
-</style>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="login-page.css">
-  <script defer src="login-page.js"></script>
+    <meta charset="UTF-8">
+    <title>Task Prioritizer</title>
+    <style>
+        .hidden { display: none; }
+
+        /* Add styles for buttons */
+        #startBtn:hover,
+        #startBtn:focus,
+        #task1Btn:hover,
+        #task1Btn:focus,
+        #task2Btn:hover,
+        #task2Btn:focus {
+          box-shadow: inset 0 0 0 2em #232323;
+          color: #ffffff;
+        }
+
+        /* Button base styles */
+        button {
+          background: none;
+          border: 2px solid;
+          font: inherit;
+          line-height: 1;
+          margin: 0.5em;
+          padding: 1em 2em;
+          transition: 0.25s;
+          color: #ffffff;
+        }
+
+        .textarea {
+          background-color: #000000;
+          color: #ffffff;
+          border-color: #ffffff;
+          padding: 1em;
+          border-radius: 10px;
+          font-family: "Heebo", sans-serif;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 1.4;
+          width: 300px;
+          height: 150px;
+          transition: all 0.2s;
+        }
+
+        .textarea:hover {
+          cursor: pointer;
+          background-color: #232323;
+        }
+
+        .textarea:focus {
+          cursor: text;
+          color: #ffffff;
+          background-color: rgb(0, 0, 0);
+          border-color: #ffffff;
+        }
+
+        /* Background */
+        body {
+          color: #ffffff;
+          background: black;
+          font: 300 1em 'Fira Sans', sans-serif;
+          align-items: center;
+          text-align: center;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        }
+
+        textarea {
+            resize:none;
+        }
+
+        h1, h2 { 
+          font-weight: 400; 
+        }
+
+        /* Layout styles */
+        .container {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          max-width: 1200px; /* Adjust based on your preference */
+        }
+
+        .leftColumn, .centerColumn, .rightColumn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .leftColumn {
+          flex: 1;
+        }
+
+        .centerColumn {
+          flex: 1;
+        }
+
+        .rightColumn {
+          flex: 1;
+        }
+
+    </style>
 </head>
-
 <body>
-  <main id="main-holder">
-    <h1 id="login-header">Login</h1>
-    
-    <div id="login-error-msg-holder">
-      <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
+    <div class="container">
+        <div class="leftColumn">
+            <h1>Task Prioritizer</h1>
+            <textarea id="taskInput" class="textarea"></textarea><br>
+            <button id="startBtn">Start Comparing</button>
+        </div>
+        <div class="centerColumn">
+            <div id="compareSection">
+                <h2>Which task is more important?</h2>
+                <div class="vertical-center">
+                <br><button id="task1Btn">Task One</button> 
+                <br> vs 
+                <br> <button id="task2Btn">Task Two</button>
+                </div>
+            </div>
+        </div>
+        <div class="rightColumn">
+            
+            <div id="resultsSection" class="hidden">
+                <h2>Tasks in order of importance:</h2>
+                <div class="centerColumn">
+                <ol id="sortedTasks"></ol>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <form id="login-form">
-      <input type="text" name="username" id="username-field" class="login-form-field" placeholder="Username">
-      <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Password">
-      <input type="submit" value="Login" id="login-form-submit">
-    </form>
-  
-  </main>
+
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const startBtn = document.getElementById('startBtn');
+        const compareSection = document.getElementById('compareSection');
+        const task1Btn = document.getElementById('task1Btn');
+        const task2Btn = document.getElementById('task2Btn');
+        const resultsSection = document.getElementById('resultsSection');
+        const sortedTasks = document.getElementById('sortedTasks');
+
+        let tasks = [];
+        let pairs = [];
+        let currentPair = 0;
+        let scores = {};
+
+        startBtn.addEventListener('click', function() {
+            tasks = taskInput.value.split(/\n|,|\r/).map(task => task.trim()).filter(task => task !== '');
+            scores = tasks.reduce((acc, task) => ({...acc, [task]: 0}), {});
+            pairs = generatePairs(tasks);
+            currentPair = 0;
+            if(pairs.length > 0) {
+                showNextPair();
+            }
+        });
+
+        task1Btn.addEventListener('click', () => handleSelection(pairs[currentPair][0]));
+        task2Btn.addEventListener('click', () => handleSelection(pairs[currentPair][1]));
+
+        function generatePairs(arr) {
+            let result = [];
+            for(let i = 0; i < arr.length; i++) {
+                for(let j = i + 1; j < arr.length; j++) {
+                    result.push([arr[i], arr[j]]);
+                }
+            }
+            return result;
+        }
+
+        function showNextPair() {
+            if(currentPair < pairs.length) {
+                compareSection.classList.remove('hidden');
+                task1Btn.textContent = pairs[currentPair][0];
+                task2Btn.textContent = pairs[currentPair][1];
+            } else {
+                displayResults();
+            }
+        }
+
+        function handleSelection(selectedTask) {
+            scores[selectedTask]++;
+            currentPair++;
+            showNextPair();
+        }
+
+        function displayResults() {
+            // compareSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            const sortedTasksList = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            sortedTasks.innerHTML = sortedTasksList.map(task => `<li>${task[0]} (Votes: ${task[1]})</li>`).join('');
+        }
+        
+    </script>
 </body>
-
-<script>
-
-const loginForm = document.getElementById("login-form");
-const loginButton = document.getElementById("login-form-submit");
-const loginErrorMsg = document.getElementById("login-error-msg");
-
-loginButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    const username = loginForm.username.value;
-    const password = loginForm.password.value;
-
-    if (username === "user" && password === "web_dev") {
-        alert("You have successfully logged in.");
-        location.reload();
-    } else {
-        loginErrorMsg.style.opacity = 1;
-    }
-})
-</script>
 </html>
